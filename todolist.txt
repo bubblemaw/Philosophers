@@ -1,0 +1,2 @@
+faire la structure pour chaque philosophe
+	il faudrait que je puisse iterer dans la liste de philo

@@ -1,1 +1,3 @@
 compiler avec -pthread
+pas le droit a la libft
+les variables glbal sont interdites
