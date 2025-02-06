@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: masase <masase@student.42.fr>              +#+  +:+       +#+         #
+#    By: maw <maw@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 16:49:44 by maw               #+#    #+#              #
-#    Updated: 2025/01/31 16:04:04 by masase           ###   ########.fr        #
+#    Updated: 2025/02/06 16:21:49 by maw              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,7 @@ NAME = philo
 SRCS = main.c \
 		utils.c \
 		routine.c \
+		create_thread.c \
 		
 
 OBJS = $(SRCS:%.c=%.o)

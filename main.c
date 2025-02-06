@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/01/31 17:02:37 by masase           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:55:54 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int philo_init(t_monitor *monitor, char **tab)
 	{
 		monitor->philo[i].id = i + 1;
 		monitor->philo[i].number_of_philo = ft_atoi(tab[1]);
-		monitor->philo[i].time_to_die = ft_atoi(tab[2]);
-		monitor->philo[i].time_to_eat = ft_atoi(tab[3]);
-		monitor->philo[i].time_to_sleep = ft_atoi(tab[4]);
+		monitor->philo[i].time_to_die = ft_atoi(tab[2]) * MILLISECONDS;
+		monitor->philo[i].time_to_eat = ft_atoi(tab[3]) * MILLISECONDS;
+		monitor->philo[i].time_to_sleep = ft_atoi(tab[4]) * MILLISECONDS;
 		monitor->philo[i].num_of_must_eat = ft_atoi(tab[5]);
 		i++;
 	}
@@ -58,5 +58,6 @@ int	main(int argc, char **argv)
 		trader(&monitor);
 		print_philo(&monitor);
 	}
+	free(monitor.philo);
 	return (0);
 }
