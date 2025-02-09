@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:05:46 by masase            #+#    #+#             */
-/*   Updated: 2025/01/31 17:02:20 by masase           ###   ########.fr       */
+/*   Updated: 2025/02/09 12:20:15 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,3 +39,25 @@ int	ft_atoi(const char *str)
 	resultat *= signe;
 	return (resultat);
 }
+
+size_t get_time(void)
+{
+	struct timeval time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		return (0);
+	return ((time.tv_sec *1000000) + time.tv_usec);
+}
+
+int	tab_size(char **tab)
+{
+	int	i;
+	
+	i = 0;
+	if (!tab)
+		return (0);
+	while (tab[i])
+		i++;
+	return (i);
+}
+

@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/02/06 16:55:54 by maw              ###   ########.fr       */
+/*   Updated: 2025/02/09 13:40:56 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ int philo_init(t_monitor *monitor, char **tab)
 		monitor->philo[i].time_to_eat = ft_atoi(tab[3]) * MILLISECONDS;
 		monitor->philo[i].time_to_sleep = ft_atoi(tab[4]) * MILLISECONDS;
 		monitor->philo[i].num_of_must_eat = ft_atoi(tab[5]);
+		monitor->philo[i].dead = 0;
+		monitor->philo[i].meals_done = 0;
+		monitor->philo[i].last_meal = get_time();
+		monitor->dead = 0;
+		
 		i++;
 	}
 	return (1);

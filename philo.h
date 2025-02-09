@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/02/06 17:16:03 by maw              ###   ########.fr       */
+/*   Updated: 2025/02/09 13:33:34 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <pthread.h>
+# include <sys/time.h> 
 # define MILLISECONDS 1000
 
 typedef struct s_monitor t_monitor;
@@ -27,6 +28,7 @@ typedef struct s_philo
 	int			id;
 	int			meals_done;
 	int			number_of_philo;
+	int			dead;
 	size_t		last_meal;
 	size_t		time_to_die;
 	size_t		time_to_eat;
@@ -39,9 +41,10 @@ typedef struct s_philo
 
 typedef struct s_monitor
 {
-
 	t_philo *philo;
-	pthread_mutex_t *eat_mutex;
+	pthread_mutex_t eat_mutex;
+	pthread_mutex_t dead_mutex;
+	int dead;
 }	t_monitor;
 
 int	ft_atoi(const char *str);
@@ -55,6 +58,7 @@ int thread_join(t_monitor *monitor);
 int mutex_destroy(t_monitor *monitor);
 void    *routine_odd(void *arg);
 void    *routine_even(void *arg);
+size_t get_time(void);
 
 
 #endif
