@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_thread.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:17:42 by maw               #+#    #+#             */
-/*   Updated: 2025/02/06 18:14:42 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/24 15:31:42 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,11 @@ int create_thread(t_monitor *monitor)
 			if (pthread_create(&monitor->philo[i].thread, NULL, routine_odd, (void *)&monitor->philo[i]) != 0)
 			return (0);
 		}
-
 		if (i == num_philo - 1)
+		{
+			pthread_create(&monitor->monitor, NULL, monitor_routine, (void *)&monitor);
 			break ; 
+		}
 		i++;
 	}
 	return (1);
@@ -77,7 +79,10 @@ int thread_join(t_monitor *monitor)
 		if (pthread_join(monitor->philo[i].thread, NULL) != 0)
 			return (0);
 		if (i == num_philo - 1)
+		{
+			pthread_join(monitor->monitor, NULL);
 			break ;
+		}
 		i++;
 	}
 	return (1);

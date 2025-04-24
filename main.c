@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/02/09 13:40:56 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/24 14:57:37 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int philo_init(t_monitor *monitor, char **tab)
+int philo_init(t_monitor *monitor, char **tab, int argc)
 {
 	int	i;
 
@@ -24,12 +24,12 @@ int philo_init(t_monitor *monitor, char **tab)
 		monitor->philo[i].time_to_die = ft_atoi(tab[2]) * MILLISECONDS;
 		monitor->philo[i].time_to_eat = ft_atoi(tab[3]) * MILLISECONDS;
 		monitor->philo[i].time_to_sleep = ft_atoi(tab[4]) * MILLISECONDS;
-		monitor->philo[i].num_of_must_eat = ft_atoi(tab[5]);
+		if (argc == 6)
+			monitor->philo[i].num_of_must_eat = ft_atoi(tab[5]);
 		monitor->philo[i].dead = 0;
 		monitor->philo[i].meals_done = 0;
 		monitor->philo[i].last_meal = get_time();
 		monitor->dead = 0;
-		
 		i++;
 	}
 	return (1);
@@ -59,7 +59,9 @@ int	main(int argc, char **argv)
 	monitor.philo = malloc(ft_atoi(argv[1]) * sizeof(t_philo));
 	if (argc == 5 || argc == 6)
 	{
-		philo_init(&monitor, argv);
+		printf("let's init philo\n");
+		philo_init(&monitor, argv, argc);
+		printf("let's go into trader\n");
 		trader(&monitor);
 		print_philo(&monitor);
 	}

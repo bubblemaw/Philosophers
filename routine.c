@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/02/09 13:45:25 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/24 15:31:33 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,18 @@ void    *routine_even(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
-	while(philo->num_of_must_eat != philo->meals_done)
+	while(1)
 	{
-		pthread_mutex_lock(&philo->monitor->dead_mutex);
-		// if (get_time() - philo->last_meal >= philo->time_to_die)
-		// {
-		// 	philo->dead = 1;
-		// 	philo->monitor->dead = 1;
-		// 	pthread_mutex_unlock(&philo->monitor->dead_mutex);
-		// 	break ;
-		// }
-		pthread_mutex_unlock(&philo->monitor->dead_mutex);
+		// pthread_mutex_lock(&philo->monitor->dead_mutex);
+		if (get_time() - philo->last_meal >= philo->time_to_die)
+		{
+			philo->dead = 1;
+			printf("le PHILO NUMERO:%d EST MORTTTTTTTTTT\n", philo->id);
+			// philo->monitor->dead = 1;
+			// pthread_mutex_unlock(&philo->monitor->dead_mutex);
+			break ;
+		}
+		// pthread_mutex_unlock(&philo->monitor->dead_mutex);
 		// if (philo->monitor->dead == 1)
 		// 	break;
 		think(philo);
@@ -72,13 +73,15 @@ void    *routine_odd(void *arg)
 	t_philo *philo;
 
 	philo = (t_philo *)arg;
-	while(philo->num_of_must_eat != philo->meals_done)
+	while(1)
 	{
 		// pthread_mutex_lock(&philo->monitor->dead_mutex);
 		if (get_time() - philo->last_meal >= philo->time_to_die)
 		{
 			philo->dead = 1;
-			philo->monitor->dead = 1;
+			printf("le PHILO NUMERO:%d EST MORTTTTTTTTTT\n", philo->id);
+			// philo->monitor->dead = 1; il faut creer un pointeur commun ou que
+			// le monitor gere ce cas
 			// pthread_mutex_unlock(&philo->monitor->dead_mutex);
 			break ;
 		}
@@ -100,10 +103,17 @@ void    *routine_odd(void *arg)
 	return (NULL);
 }
 
+void	*monitor_routine(void *arg)
+{
+	
+}
+
 int	trader(t_monitor *monitor)
 {
 	create_mutex(monitor);
+	printf("go creer thread\n");
 	create_thread(monitor);
+	printf("go jointhread\n");
 	thread_join(monitor);
 	mutex_destroy(monitor);
 	return (1);

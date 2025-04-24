@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/02/09 13:33:34 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/24 15:31:56 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_philo
 
 typedef struct s_monitor
 {
+	pthread_t monitor;
 	t_philo *philo;
 	pthread_mutex_t eat_mutex;
 	pthread_mutex_t dead_mutex;
@@ -58,7 +59,10 @@ int thread_join(t_monitor *monitor);
 int mutex_destroy(t_monitor *monitor);
 void    *routine_odd(void *arg);
 void    *routine_even(void *arg);
+void	*monitor_routine(void *arg);
 size_t get_time(void);
+int philo_init(t_monitor *monitor, char **tab, int argc);
+int print_philo(t_monitor *monitor);
 
 
 #endif
