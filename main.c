@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/04/24 14:57:37 by masase           ###   ########.fr       */
+/*   Updated: 2025/04/25 15:44:19 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int philo_init(t_monitor *monitor, char **tab, int argc)
 	int	i;
 
 	i = 0;
+	monitor->philo_number = ft_atoi(tab[1]);
 	while(i < ft_atoi(tab[1]))
 	{
 		monitor->philo[i].id = i + 1;
@@ -29,6 +30,7 @@ int philo_init(t_monitor *monitor, char **tab, int argc)
 		monitor->philo[i].dead = 0;
 		monitor->philo[i].meals_done = 0;
 		monitor->philo[i].last_meal = get_time();
+		monitor->philo[i].monitor = monitor;
 		monitor->dead = 0;
 		i++;
 	}
@@ -63,7 +65,7 @@ int	main(int argc, char **argv)
 		philo_init(&monitor, argv, argc);
 		printf("let's go into trader\n");
 		trader(&monitor);
-		print_philo(&monitor);
+		// print_philo(&monitor);
 	}
 	free(monitor.philo);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/04/24 15:31:56 by masase           ###   ########.fr       */
+/*   Updated: 2025/04/25 15:16:44 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ typedef struct s_philo
 
 typedef struct s_monitor
 {
-	pthread_t monitor;
+	pthread_t thread;
 	t_philo *philo;
 	pthread_mutex_t eat_mutex;
 	pthread_mutex_t dead_mutex;
 	int dead;
+	int philo_number;
 }	t_monitor;
 
 int	ft_atoi(const char *str);

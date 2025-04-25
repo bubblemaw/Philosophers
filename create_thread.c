@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:17:42 by maw               #+#    #+#             */
-/*   Updated: 2025/04/24 15:31:42 by masase           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:37:39 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int create_thread(t_monitor *monitor)
 		}
 		if (i == num_philo - 1)
 		{
-			pthread_create(&monitor->monitor, NULL, monitor_routine, (void *)&monitor);
+			printf("on cree le monitor thread\n");
+			pthread_create(&monitor->thread, NULL, monitor_routine, (void *)monitor);
 			break ; 
 		}
 		i++;
@@ -80,7 +81,8 @@ int thread_join(t_monitor *monitor)
 			return (0);
 		if (i == num_philo - 1)
 		{
-			pthread_join(monitor->monitor, NULL);
+			printf("on attend un thread\n");
+			pthread_join(monitor->thread, NULL);
 			break ;
 		}
 		i++;
