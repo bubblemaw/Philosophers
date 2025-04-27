@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   create_thread.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:17:42 by maw               #+#    #+#             */
-/*   Updated: 2025/04/25 16:37:39 by masase           ###   ########.fr       */
+/*   Updated: 2025/04/26 14:30:08 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int create_mutex(t_monitor *monitor)
+int	create_mutex(t_monitor *monitor)
 {
-	int i;
-	int num_philo;
+	int	i;
+	int	num_philo;
 
 	i = 0;
 	num_philo = monitor->philo->number_of_philo;
@@ -31,20 +31,21 @@ int create_mutex(t_monitor *monitor)
 		if (pthread_mutex_init(monitor->philo[i].left_fork_mutex, NULL) != 0)
 			return (0);
 		if (i == num_philo - 1)
-			break ; 
+			break ;
 		i++;
 	}
 	return (1);
 }
 
-int create_thread(t_monitor *monitor)
+int	create_thread(t_monitor *monitor)
 {
-	int i;
-	int num_philo;
+	int	i;
+	int	num_philo;
 
 	i = 0;
 	num_philo = monitor->philo->number_of_philo;
 	i = 0;
+	monitor->simu_start = get_time();
 	while (1)
 	{
 		if (monitor->philo[i].id % 2 == 0)
@@ -59,19 +60,19 @@ int create_thread(t_monitor *monitor)
 		}
 		if (i == num_philo - 1)
 		{
-			printf("on cree le monitor thread\n");
+			// printf("on cree le monitor thread\n");
 			pthread_create(&monitor->thread, NULL, monitor_routine, (void *)monitor);
-			break ; 
+			break ;
 		}
 		i++;
 	}
 	return (1);
 }
 
-int thread_join(t_monitor *monitor)
+int	thread_join(t_monitor *monitor)
 {
-	int i;
-	int num_philo;
+	int	i;
+	int	num_philo;
 
 	num_philo = monitor->philo->number_of_philo;
 	i = 0;
@@ -81,7 +82,7 @@ int thread_join(t_monitor *monitor)
 			return (0);
 		if (i == num_philo - 1)
 		{
-			printf("on attend un thread\n");
+			// printf("on attend un thread\n");
 			pthread_join(monitor->thread, NULL);
 			break ;
 		}
@@ -90,10 +91,10 @@ int thread_join(t_monitor *monitor)
 	return (1);
 }
 
-int mutex_destroy(t_monitor *monitor)
+int	mutex_destroy(t_monitor *monitor)
 {
-	int i;
-	int num_philo;
+	int	i;
+	int	num_philo;
 
 	num_philo = monitor->philo->number_of_philo;
 	i = 0;
@@ -103,7 +104,7 @@ int mutex_destroy(t_monitor *monitor)
 		if (pthread_mutex_destroy(monitor->philo[i].left_fork_mutex) != 0)
 			return (0);
 		if (i == num_philo - 1)
-			break ; 
+			break ;
 		i++;
 	}
 	return (1);

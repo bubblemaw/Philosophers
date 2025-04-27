@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:05:46 by masase            #+#    #+#             */
-/*   Updated: 2025/02/09 12:20:15 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/26 14:08:10 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,19 @@ int	ft_atoi(const char *str)
 	return (resultat);
 }
 
-size_t get_time(void)
+size_t	get_time(void)
 {
-	struct timeval time;
+	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
 		return (0);
-	return ((time.tv_sec *1000000) + time.tv_usec);
+	return ((time.tv_sec * 1000) + time.tv_usec / MILLISECONDS);
 }
 
 int	tab_size(char **tab)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!tab)
 		return (0);
