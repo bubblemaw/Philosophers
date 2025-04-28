@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/04/26 13:03:40 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/28 17:50:56 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <pthread.h>
+# include <string.h>
 # include <sys/time.h> 
 # define MILLISECONDS 1000
 
@@ -48,6 +49,7 @@ typedef struct s_monitor
 	int				dead;
 	int				philo_number;
 	size_t			simu_start;
+	int				meals_counter_flag;
 }	t_monitor;
 
 int		ft_atoi(const char *str);
@@ -62,6 +64,7 @@ int		mutex_destroy(t_monitor *monitor);
 void	*routine_odd(void *arg);
 void	*routine_even(void *arg);
 void	*monitor_routine(void *arg);
+int		meals_manager(t_monitor *monitor, int *meals_done_flag, int i);
 size_t	get_time(void);
 int		philo_init(t_monitor *monitor, char **tab, int argc);
 int		print_philo(t_monitor *monitor);

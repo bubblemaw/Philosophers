@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/04/26 14:32:44 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/28 19:52:06 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	eating(t_philo *philo)
 	size_t	done_time;
 
 	done_time = 0;
-	philo->last_meal = get_time();
 	philo->meals_done++;
 	printf("%ld philo %d is eating...\n",
 		(get_time() - philo->monitor->simu_start), philo->id);
@@ -60,12 +59,7 @@ int	eating(t_philo *philo)
 			return (0);
 		}
 	}
-	if (philo->meals_done == philo->num_of_must_eat)
-	{
-		pthread_mutex_unlock(philo->left_fork_mutex);
-		pthread_mutex_unlock(philo->right_fork_mutex);
-		return (0);
-	}
+	philo->last_meal = get_time();
 	return (1);
 }
 
@@ -117,10 +111,20 @@ void    *routine_odd(void *arg)
 		think(philo);
 		pthread_mutex_lock(philo->right_fork_mutex);
 		printf("%ld philo %d has taken a fork...\n",
-			get_time() - philo->monitor->simu_start, philo->id);
-		pthread_mutex_lock(philo->left_fork_mutex);
+		get_time() - philo->monitor->simu_start, philo->id);
+		
+		
+		printf("on va chercher la leftfork;\n");
+		if (pthread_mutex_lock(philo->left_fork_mutex) != 0)
+		{
+			printf("on passe dedans\n");
+			continue ; 
+		}
+
+		printf("ja;i pris cette fourchette gauche\n");			
 		printf("%ld philo %d has taken a fork...\n",
 			get_time() - philo->monitor->simu_start, philo->id);
+
 		if (eating(philo) == 0)
 			return (NULL);
 		pthread_mutex_unlock(philo->right_fork_mutex);
@@ -142,27 +146,45 @@ void	*monitor_routine(void *arg)
 	i = 0;
 	meals_done_flag = 0;
 	num_philo = monitor->philo_number;
+	printf("on est dans le monitor \n");
 	while (1)
 	{
 		i = 0;
 		while (i < num_philo)
 		{
-			if (monitor->philo[i].dead == 1)
+			if (get_time() - monitor->philo[i].last_meal >= monitor->philo[i].time_to_die)
+			{
+				monitor->philo[i].dead = 1;
+				monitor->dead = 1;
+				printf("%ld philo %d died\n",
+					(get_time() - monitor->simu_start), monitor->philo[i].id);
+				printf("c'est monitor qui fait quitter\n");
+				return (NULL);
+			}
+			if (monitor->meals_counter_flag == 1 && meals_manager(monitor, &meals_done_flag, i) == 0)
 			{
 				monitor->dead = 1;
 				return (NULL);
 			}
-			if (monitor->philo[i].meals_done
-				== monitor->philo[i].num_of_must_eat)
-				meals_done_flag = 1;
-			else if (monitor->philo[i].meals_done
-				!= monitor->philo[i].num_of_must_eat)
-				meals_done_flag = 0;
-			if (meals_done_flag == 1 && i == num_philo - 1)
-				return (NULL);
 			i++;
 		}
 	}
+}
+
+int meals_manager(t_monitor *monitor, int *meals_done_flag, int i)
+{
+	int num_philo;
+
+	num_philo = monitor->philo_number;
+	if (monitor->philo[i].meals_done
+		== monitor->philo[i].num_of_must_eat)
+		*meals_done_flag = 1;
+	else if (monitor->philo[i].meals_done
+		!= monitor->philo[i].num_of_must_eat)
+		*meals_done_flag = 0;
+	if (*meals_done_flag == 1 && i == num_philo - 1)
+		return (0);
+	return (1);
 }
 
 int	trader(t_monitor *monitor)

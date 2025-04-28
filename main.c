@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/04/26 14:25:03 by maw              ###   ########.fr       */
+/*   Updated: 2025/04/28 17:50:15 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ int	main(int argc, char **argv)
 {
 	t_monitor	monitor;
 
+	memset(&monitor, 0, sizeof(t_monitor));
 	monitor.philo = malloc(ft_atoi(argv[1]) * sizeof(t_philo));
+	if (argc == 6)
+		monitor.meals_counter_flag = 1;
 	if (argc == 5 || argc == 6)
 	{
 		// printf("let's init philo\n");
