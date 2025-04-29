@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:17:42 by maw               #+#    #+#             */
-/*   Updated: 2025/04/28 13:29:43 by masase           ###   ########.fr       */
+/*   Updated: 2025/04/29 12:21:40 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	create_mutex(t_monitor *monitor)
 		monitor->philo[i].left_fork_mutex = malloc(sizeof(pthread_mutex_t));
 		if (monitor->philo[i].left_fork_mutex == NULL)
 			return (0);
+		if (num_philo == 1)
+			break ;
 		if (i == 0)
 			monitor->philo[num_philo - 1].right_fork_mutex = monitor->philo[i].left_fork_mutex;
 		else

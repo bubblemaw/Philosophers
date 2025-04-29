@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/04/28 19:52:06 by masase           ###   ########.fr       */
+/*   Updated: 2025/04/29 13:58:49 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	sleeping(t_philo *philo)
 		(get_time() - philo->monitor->simu_start), philo->id);
 	while (done_time != philo->time_to_sleep)
 	{
-		usleep(1000);
 		done_time += 1;
 		if (philo->monitor->dead == 1)
 		{
@@ -109,18 +108,15 @@ void    *routine_odd(void *arg)
 			break ;
 		}
 		think(philo);
-		pthread_mutex_lock(philo->right_fork_mutex);
-		printf("%ld philo %d has taken a fork...\n",
-		get_time() - philo->monitor->simu_start, philo->id);
-		
-		
-		printf("on va chercher la leftfork;\n");
-		if (pthread_mutex_lock(philo->left_fork_mutex) != 0)
+		if (philo->right_fork_mutex)
 		{
-			printf("on passe dedans\n");
-			continue ; 
+			pthread_mutex_lock(philo->right_fork_mutex);
+			printf("%ld philo %d has taken a fork...\n",
+			get_time() - philo->monitor->simu_start, philo->id);
 		}
-
+		else 
+			continue ;
+		pthread_mutex_lock(philo->left_fork_mutex);
 		printf("ja;i pris cette fourchette gauche\n");			
 		printf("%ld philo %d has taken a fork...\n",
 			get_time() - philo->monitor->simu_start, philo->id);
