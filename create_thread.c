@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_thread.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:17:42 by maw               #+#    #+#             */
-/*   Updated: 2025/05/01 12:59:38 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/02 12:33:09 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,18 @@ int	create_thread(t_monitor *monitor)
 	monitor->simu_start = get_time();
 	while (1)
 	{
-		if (monitor->philo[i].id % 2 == 0)
+		if (i != num_philo - 1)
 		{
 			if (pthread_create(&monitor->philo[i].thread, NULL, routine_even, (void *)&monitor->philo[i]) != 0)
-			return (0);
+				return (0);
 		}
-		else
+		else if (i == num_philo - 1)
 		{
 			if (pthread_create(&monitor->philo[i].thread, NULL, routine_odd, (void *)&monitor->philo[i]) != 0)
-			return (0);
+				return (0);
 		}
 		if (i == num_philo - 1)
 		{
-			// printf("on cree le monitor thread\n");
 			pthread_create(&monitor->thread, NULL, monitor_routine, (void *)monitor);
 			break ;
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/01 13:15:39 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/02 14:40:31 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo
 	int				number_of_philo;
 	int				dead;
 	int				eating;
+	int				think_flag;
 	size_t			last_meal;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -50,6 +51,7 @@ typedef struct s_monitor
 	int				dead;
 	int				philo_number;
 	size_t			simu_start;
+	pthread_mutex_t	eating_mutex;
 	int				meals_counter_flag;
 }	t_monitor;
 
