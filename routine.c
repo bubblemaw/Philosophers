@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/02 16:56:52 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/03 16:02:08 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,26 @@ int	sleeping(t_philo *philo)
 	done_time = 0;
 	printf("%ld %d is sleeping...\n",
 		(get_time() - philo->monitor->simu_start), philo->id);
-	while (done_time != philo->time_to_sleep)
+	// while (done_time != philo->time_to_sleep)
+	// {
+	// 	usleep(1000);
+	// 	done_time += 1;
+	// 	if (philo->monitor->dead == 1)
+	// 	{
+	// 		// printf("philo %d quit...:(\n", philo->id);
+	// 		return (0);
+	// 	}
+	// }
+	size_t	start_time;
+	size_t	current_time;
+
+	start_time = get_time();
+	current_time = get_time();
+	while (philo->time_to_sleep >= current_time - start_time)
 	{
-		usleep(1000);
-		done_time += 1;
+		current_time = get_time();
 		if (philo->monitor->dead == 1)
-		{
-			// printf("philo %d quit...:(\n", philo->id);
 			return (0);
-		}
 	}
 	philo->think_flag = 0;
 	return (1);
@@ -46,28 +57,41 @@ int	eating(t_philo *philo)
 	size_t	done_time;
 
 	done_time = 0;
-	philo->meals_done++;
 
 
+
+	pthread_mutex_lock(&philo->monitor->eating_mutex);
+	philo->last_meal = get_time();
+	philo->eating = 0;
+	pthread_mutex_unlock(&philo->monitor->eating_mutex);
 	printf("%ld %d is eating...\n",
 		(get_time() - philo->monitor->simu_start), philo->id);
 	philo->eating = 1;
-	while (done_time != philo->time_to_eat)
+	// while (done_time != philo->time_to_eat)
+	// {
+	// 	usleep(1000);
+	// 	done_time += 1;
+	// 	if (philo->monitor->dead == 1)
+	// 	{
+	// 		pthread_mutex_unlock(philo->left_fork_mutex);
+	// 		pthread_mutex_unlock(philo->right_fork_mutex);
+	// 		// printf("philo %d quit...:(\n", philo->id);
+	// 		return (0);
+	// 	}
+	// }
+	size_t	start_time;
+	size_t	current_time;
+
+	start_time = get_time();
+	current_time = get_time();
+	while (philo->time_to_eat >= current_time - start_time)
 	{
-		usleep(1000);
-		done_time += 1;
+		current_time = get_time();
+		// printf("%ld\n", current_time - start_time);
 		if (philo->monitor->dead == 1)
-		{
-			pthread_mutex_unlock(philo->left_fork_mutex);
-			pthread_mutex_unlock(philo->right_fork_mutex);
-			// printf("philo %d quit...:(\n", philo->id);
 			return (0);
-		}
 	}
-	pthread_mutex_lock(&philo->monitor->eating_mutex);
-	philo->last_meal = get_time();
-	pthread_mutex_unlock(&philo->monitor->eating_mutex);
-	philo->eating = 0;
+	philo->meals_done++;
 	philo->think_flag = 0;
 	return (1);
 }
@@ -188,7 +212,7 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < num_philo)
 		{
-			pthread_mutex_lock(&monitor->eating_mutex);
+			// pthread_mutex_lock(&monitor->eating_mutex);
 			if (get_time() - monitor->philo[i].last_meal
 				>= monitor->philo[i].time_to_die
 				&& monitor->philo[i].eating == 0)
@@ -199,10 +223,10 @@ void	*monitor_routine(void *arg)
 				// printf("%ld %d died\n",
 				// 	(get_time() - monitor->simu_start), monitor->philo[i].id);
 				// printf("c'est monitor qui fait quitter\n");
-				pthread_mutex_unlock(&monitor->eating_mutex);
+				// pthread_mutex_unlock(&monitor->eating_mutex);
 				return (NULL);
 			}
-			pthread_mutex_unlock(&monitor->eating_mutex);
+			// pthread_mutex_unlock(&monitor->eating_mutex);
 			if (monitor->meals_counter_flag == 1
 				&& meals_manager(monitor, &meals_done_flag, i) == 0)
 			{
