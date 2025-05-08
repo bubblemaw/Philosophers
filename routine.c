@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/03 16:02:08 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/08 22:16:16 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,16 @@ int	think(t_philo *philo)
 
 int	sleeping(t_philo *philo)
 {
-	size_t	done_time;
-
-	done_time = 0;
-	printf("%ld %d is sleeping...\n",
-		(get_time() - philo->monitor->simu_start), philo->id);
-	// while (done_time != philo->time_to_sleep)
-	// {
-	// 	usleep(1000);
-	// 	done_time += 1;
-	// 	if (philo->monitor->dead == 1)
-	// 	{
-	// 		// printf("philo %d quit...:(\n", philo->id);
-	// 		return (0);
-	// 	}
-	// }
 	size_t	start_time;
 	size_t	current_time;
 
+	printf("%ld %d is sleeping...\n",
+		(get_time() - philo->monitor->simu_start), philo->id);
 	start_time = get_time();
 	current_time = get_time();
 	while (philo->time_to_sleep >= current_time - start_time)
 	{
+		usleep(500);
 		current_time = get_time();
 		if (philo->monitor->dead == 1)
 			return (0);
@@ -54,49 +42,34 @@ int	sleeping(t_philo *philo)
 
 int	eating(t_philo *philo)
 {
-	size_t	done_time;
-
-	done_time = 0;
-
-
-
-	pthread_mutex_lock(&philo->monitor->eating_mutex);
-	philo->last_meal = get_time();
-	philo->eating = 0;
-	pthread_mutex_unlock(&philo->monitor->eating_mutex);
-	printf("%ld %d is eating...\n",
-		(get_time() - philo->monitor->simu_start), philo->id);
-	philo->eating = 1;
-	// while (done_time != philo->time_to_eat)
-	// {
-	// 	usleep(1000);
-	// 	done_time += 1;
-	// 	if (philo->monitor->dead == 1)
-	// 	{
-	// 		pthread_mutex_unlock(philo->left_fork_mutex);
-	// 		pthread_mutex_unlock(philo->right_fork_mutex);
-	// 		// printf("philo %d quit...:(\n", philo->id);
-	// 		return (0);
-	// 	}
-	// }
 	size_t	start_time;
 	size_t	current_time;
 
+	printf("%ld %d is eating...\n",
+		(get_time() - philo->monitor->simu_start), philo->id);
+	philo->eating = 1;
 	start_time = get_time();
 	current_time = get_time();
 	while (philo->time_to_eat >= current_time - start_time)
 	{
+		usleep(500);
 		current_time = get_time();
 		// printf("%ld\n", current_time - start_time);
 		if (philo->monitor->dead == 1)
 			return (0);
 	}
+	// pthread_mutex_lock(&philo->monitor->eating_mutex);
+	philo->last_meal = get_time();
+	philo->eating = 0;
+	// pthread_mutex_unlock(&philo->monitor->eating_mutex);
 	philo->meals_done++;
 	philo->think_flag = 0;
+	pthread_mutex_unlock(philo->left_fork_mutex);
+	pthread_mutex_unlock(philo->right_fork_mutex);
 	return (1);
 }
 
-void    *routine_even(void *arg)
+void    *routine(void *arg)
 {
 	t_philo	*philo;
 
@@ -108,23 +81,23 @@ void    *routine_even(void *arg)
 		// if (philo->left_fork_mutex)
 		// {
 			pthread_mutex_lock(philo->left_fork_mutex);
-			// if (philo->monitor->dead == 1)
-			// {
-			// 	pthread_mutex_unlock(philo->left_fork_mutex);
-			// 	break ;
-			// }
+			if (philo->monitor->dead == 1)
+			{
+				pthread_mutex_unlock(philo->left_fork_mutex);
+				break ;
+			}
 			printf("%ld %d has taken a fork...\n",
 				get_time() - philo->monitor->simu_start, philo->id);
 		// }
 		// if (philo->right_fork_mutex)
 		// {
 			pthread_mutex_lock(philo->right_fork_mutex);
-			// if (philo->monitor->dead == 1)
-			// {
-			// 	pthread_mutex_unlock(philo->left_fork_mutex);
-			// 	pthread_mutex_unlock(philo->right_fork_mutex);
-			// 	break ;
-			// }
+			if (philo->monitor->dead == 1)
+			{
+				pthread_mutex_unlock(philo->left_fork_mutex);
+				pthread_mutex_unlock(philo->right_fork_mutex);
+				break ;
+			}
 			printf("%ld %d has taken a fork...\n",
 				get_time() - philo->monitor->simu_start, philo->id);
 		// }
@@ -132,8 +105,6 @@ void    *routine_even(void *arg)
 		// 	continue ;
 		if (eating(philo) == 0)
 			break ;
-		pthread_mutex_unlock(philo->left_fork_mutex);
-		pthread_mutex_unlock(philo->right_fork_mutex);
 		if (sleeping(philo) == 0)
 			break ;
 	}
@@ -146,7 +117,7 @@ void    *routine_even(void *arg)
 	return (NULL);
 }
 
-void    *routine_odd(void *arg)
+void    *routine_last(void *arg)
 {
 	t_philo	*philo;
 
@@ -158,23 +129,23 @@ void    *routine_odd(void *arg)
 		// if (philo->right_fork_mutex)
 		// {
 			pthread_mutex_lock(philo->right_fork_mutex);
-			// if (philo->monitor->dead == 1)
-			// {
-			// 	pthread_mutex_unlock(philo->right_fork_mutex);
-			// 	break ;
-			// }
+			if (philo->monitor->dead == 1)
+			{
+				pthread_mutex_unlock(philo->right_fork_mutex);
+				break ;
+			}
 			printf("%ld %d has taken a fork...\n",
 				get_time() - philo->monitor->simu_start, philo->id);
 		// }
 		// if (philo->left_fork_mutex)
 		// {
 			pthread_mutex_lock(philo->left_fork_mutex);
-			// if (philo->monitor->dead == 1)
-			// {
-			// 	pthread_mutex_unlock(philo->left_fork_mutex);
-			// 	pthread_mutex_unlock(philo->right_fork_mutex);
-			// 	break ;
-			// }
+			if (philo->monitor->dead == 1)
+			{
+				pthread_mutex_unlock(philo->left_fork_mutex);
+				pthread_mutex_unlock(philo->right_fork_mutex);
+				break ;
+			}
 			printf("%ld %d has taken a fork...\n",
 				get_time() - philo->monitor->simu_start, philo->id);
 		// }
@@ -182,8 +153,6 @@ void    *routine_odd(void *arg)
 		// 	continue ;
 		if (eating(philo) == 0)
 			break ;
-		pthread_mutex_unlock(philo->right_fork_mutex);
-		pthread_mutex_unlock(philo->left_fork_mutex);
 		if (sleeping(philo) == 0)
 			break ;
 	}
@@ -217,9 +186,10 @@ void	*monitor_routine(void *arg)
 				>= monitor->philo[i].time_to_die
 				&& monitor->philo[i].eating == 0)
 			{
-				monitor->dead = 1;
 				monitor->philo[i].dead = 1;
-
+				monitor->dead = 1;
+				pthread_mutex_unlock(monitor->philo[i].left_fork_mutex);
+				pthread_mutex_unlock(monitor->philo[i].right_fork_mutex);
 				// printf("%ld %d died\n",
 				// 	(get_time() - monitor->simu_start), monitor->philo[i].id);
 				// printf("c'est monitor qui fait quitter\n");

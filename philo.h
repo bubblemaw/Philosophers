@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/02 14:40:31 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/08 17:05:45 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ int		create_mutex(t_monitor *monitor);
 int		create_thread(t_monitor *monitor);
 int		thread_join(t_monitor *monitor);
 int		mutex_destroy(t_monitor *monitor);
-void	*routine_odd(void *arg);
-void	*routine_even(void *arg);
+void	*routine_last(void *arg);
+void	*routine(void *arg);
 void	*monitor_routine(void *arg);
 int		meals_manager(t_monitor *monitor, int *meals_done_flag, int i);
 size_t	get_time(void);
