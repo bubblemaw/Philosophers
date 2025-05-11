@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/08 17:05:45 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/10 22:55:49 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_philo
 	int				num_of_must_eat;
 	pthread_mutex_t	*right_fork_mutex;
 	pthread_mutex_t	*left_fork_mutex;
+	pthread_mutex_t *meal;
 	t_monitor		*monitor;
 }	t_philo;
 
@@ -71,5 +72,10 @@ int		meals_manager(t_monitor *monitor, int *meals_done_flag, int i);
 size_t	get_time(void);
 int		philo_init(t_monitor *monitor, char **tab, int argc);
 int		print_philo(t_monitor *monitor);
+int		unlock_fork(t_philo *philo);
+int		taking_fork(t_philo *philo);
+int		taking_fork_last_philo(t_philo *philo);
+int		right_fork(t_philo *philo);
+int		check_dead(t_philo *philo);
 
 #endif

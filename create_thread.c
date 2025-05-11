@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 16:17:42 by maw               #+#    #+#             */
-/*   Updated: 2025/05/08 17:05:57 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/11 09:13:15 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	create_mutex(t_monitor *monitor)
 	while (1)
 	{
 		monitor->philo[i].left_fork_mutex = malloc(sizeof(pthread_mutex_t));
+		monitor->philo[i].meal = malloc(sizeof(pthread_mutex_t));
 		if (monitor->philo[i].left_fork_mutex == NULL)
 			return (0);
 		if (num_philo == 1)
@@ -31,6 +32,8 @@ int	create_mutex(t_monitor *monitor)
 		else
 			monitor->philo[i - 1].right_fork_mutex = monitor->philo[i].left_fork_mutex;
 		if (pthread_mutex_init(monitor->philo[i].left_fork_mutex, NULL) != 0)
+			return (0);
+		if (pthread_mutex_init(monitor->philo[i].meal, NULL) != 0)
 			return (0);
 		if (i == num_philo - 1)
 			break ;
@@ -103,6 +106,8 @@ int	mutex_destroy(t_monitor *monitor)
 	{
 		free (monitor->philo[i].left_fork_mutex);
 		if (pthread_mutex_destroy(monitor->philo[i].left_fork_mutex) != 0)
+			return (0);
+		if (pthread_mutex_destroy(monitor->philo[i].meal) != 0)
 			return (0);
 		if (i == num_philo - 1)
 			break ;
