@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:05:46 by masase            #+#    #+#             */
-/*   Updated: 2025/05/12 12:49:47 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/12 19:52:04 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 int	ft_atoi(const char *str)
 {
@@ -46,7 +46,7 @@ size_t	get_time(void)
 
 	if (gettimeofday(&time, NULL) == -1)
 		return (0);
-	return ((time.tv_sec * 1000) + time.tv_usec / MILLISECONDS);
+	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
 }
 
 int	tab_size(char **tab)

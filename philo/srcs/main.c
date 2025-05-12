@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/05/12 12:47:31 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/12 19:51:53 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 int	philo_init(t_monitor *monitor, char **tab, int argc)
 {
@@ -59,6 +59,15 @@ int	check_numerical_args(char **tab)
 		i++;
 	}
 	return (i);
+}
+
+int	simu_start(t_monitor *monitor)
+{
+	create_mutex(monitor);
+	create_thread(monitor);
+	thread_join(monitor);
+	mutex_destroy(monitor);
+	return (1);
 }
 
 int	main(int argc, char **argv)

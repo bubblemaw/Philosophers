@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   action.c                                           :+:      :+:    :+:   */
+/*   action_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/08 17:10:50 by maw               #+#    #+#             */
-/*   Updated: 2025/05/12 12:40:42 by maw              ###   ########.fr       */
+/*   Created: 2025/05/12 16:47:47 by masase            #+#    #+#             */
+/*   Updated: 2025/05/12 19:51:05 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
-int unlock_fork(t_philo *philo)
+int	unlock_fork(t_philo *philo)
 {
 	if (philo->left_fork_mutex)
 		pthread_mutex_unlock(philo->left_fork_mutex);
@@ -21,7 +21,7 @@ int unlock_fork(t_philo *philo)
 	return (0);
 }
 
-int taking_fork(t_philo *philo)
+int	taking_fork(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork_mutex);
 	if (philo->monitor->dead == 1)
@@ -42,9 +42,9 @@ int taking_fork(t_philo *philo)
 	return (1);
 }
 
-int taking_fork_last_philo(t_philo *philo)
+int	taking_fork_last_philo(t_philo *philo)
 {
-	while(philo->monitor->dead != 1)
+	while (philo->monitor->dead != 1)
 	{
 		if (philo->right_fork_mutex)
 		{
@@ -81,28 +81,5 @@ int	right_fork(t_philo *philo)
 	}
 	printf("%ld %d has taken a fork...\n",
 		get_time() - philo->monitor->simu_start, philo->id);
-	return (1);
-}
-
-
-int check_dead(t_philo *philo)
-{
-	if (philo->eating == 0)
-	{
-		pthread_mutex_lock(philo->meal);
-		if (get_time() - philo->last_meal
-			> philo->time_to_die
-			&& philo->eating == 0)
-		{
-			philo->dead = 1;
-			philo->monitor->dead = 1;
-			if (philo->left_fork_mutex)
-				pthread_mutex_unlock(philo->left_fork_mutex);
-			if (philo->right_fork_mutex)
-				pthread_mutex_unlock(philo->right_fork_mutex);
-			return (0);
-		}
-		pthread_mutex_unlock(philo->meal);
-	}
 	return (1);
 }

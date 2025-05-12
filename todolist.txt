@@ -1,5 +1,0 @@
-faire la structure pour chaque philosophe
-	il faudrait que je puisse iterer dans la liste de philo
-comment reduire le temps vant de mourrir
-	quand quelqun meurt faut que ca quitte immediatement
-	

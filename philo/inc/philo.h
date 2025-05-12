@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/12 12:50:20 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/12 19:52:16 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@
 # include <pthread.h>
 # include <string.h>
 # include <sys/time.h> 
-# define MILLISECONDS 1000
 
-typedef struct s_monitor t_monitor;
+typedef struct s_monitor	t_monitor;
 
 typedef struct s_philo
 {
@@ -31,7 +30,6 @@ typedef struct s_philo
 	int				number_of_philo;
 	int				dead;
 	int				eating;
-	int				think_flag;
 	size_t			last_meal;
 	size_t			time_to_die;
 	size_t			time_to_eat;
@@ -69,15 +67,15 @@ int		mutex_destroy(t_monitor *monitor);
 void	*routine_last(void *arg);
 void	*routine(void *arg);
 void	*monitor_routine(void *arg);
-int		meals_manager(t_monitor *monitor, int *meals_done_flag, int i);
+int		meals_counter(t_monitor *monitor, int *meals_done_flag, int i);
 size_t	get_time(void);
 int		philo_init(t_monitor *monitor, char **tab, int argc);
-int		print_philo(t_monitor *monitor);
 int		unlock_fork(t_philo *philo);
 int		taking_fork(t_philo *philo);
 int		taking_fork_last_philo(t_philo *philo);
 int		right_fork(t_philo *philo);
 int		check_dead(t_philo *philo);
 int		check_numerical_args(char **tab);
+int		create_monitor_thread(t_monitor *monitor, int i);
 
 #endif
