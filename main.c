@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:39:00 by maw               #+#    #+#             */
-/*   Updated: 2025/05/11 09:13:21 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/12 12:47:31 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	philo_init(t_monitor *monitor, char **tab, int argc)
 			monitor->philo[i].num_of_must_eat = ft_atoi(tab[5]);
 		monitor->philo[i].dead = 0;
 		monitor->philo[i].meals_done = 0;
+		monitor->philo[i].eating = 0;
 		monitor->philo[i].monitor = monitor;
 		monitor->dead = 0;
 		monitor->philo[i].last_meal = get_time();
@@ -37,22 +38,27 @@ int	philo_init(t_monitor *monitor, char **tab, int argc)
 	return (1);
 }
 
-int	print_philo(t_monitor *monitor)
+int	check_numerical_args(char **tab)
 {
 	int	i;
+	int	j;
 
-	i = 0;
-	while (i < monitor->philo->number_of_philo)
+	i = 1;
+	while (tab[i])
 	{
-		printf("%d\n", monitor->philo[i].id);
-		printf("%d\n", monitor->philo[i].number_of_philo);
-		printf("%ld\n", monitor->philo[i].time_to_die);
-		printf("%ld\n", monitor->philo[i].time_to_eat);
-		printf("%ld\n", monitor->philo[i].time_to_sleep);
-		printf("%d\n", monitor->philo[i].num_of_must_eat);
+		j = 0;
+		while (tab[i][j])
+		{
+			if (tab[i][j] >= '0' && tab[i][j] <= '9')
+				j++;
+			else
+			{
+				return (0);
+			}
+		}
 		i++;
 	}
-	return (1);
+	return (i);
 }
 
 int	main(int argc, char **argv)
@@ -60,17 +66,18 @@ int	main(int argc, char **argv)
 	t_monitor	monitor;
 
 	memset(&monitor, 0, sizeof(t_monitor));
-	monitor.philo = malloc(ft_atoi(argv[1]) * sizeof(t_philo));
 	if (argc == 6)
 		monitor.meals_counter_flag = 1;
 	if (argc == 5 || argc == 6)
 	{
-		// printf("let's init philo\n");
+		if (check_numerical_args(argv) == 0)
+			return (0);
+		monitor.philo = malloc(ft_atoi(argv[1]) * sizeof(t_philo));
+		if (monitor.philo == NULL)
+			return (0);
 		philo_init(&monitor, argv, argc);
-		// printf("let's go into trader\n");
-		trader(&monitor);
-		// print_philo(&monitor);
+		simu_start(&monitor);
+		free(monitor.philo);
 	}
-	free(monitor.philo);
 	return (0);
 }

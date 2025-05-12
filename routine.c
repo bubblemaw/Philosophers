@@ -6,7 +6,7 @@
 /*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/11 09:13:25 by maw              ###   ########.fr       */
+/*   Updated: 2025/05/12 12:52:52 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void    *routine(void *arg)
 	{
 		think(philo);
 		if (philo->id % 2 == 0)
-			usleep(1000);
+			usleep(7000);
 		if (taking_fork(philo) == 0)
 			break ;
 		if (eating(philo) == 0)
@@ -102,8 +102,7 @@ void    *routine_last(void *arg)
 	philo = (t_philo *)arg;
 	while (philo->monitor->dead != 1)
 	{
-		if (philo->think_flag == 0)
-			think(philo);
+		think(philo);
 		if (taking_fork_last_philo(philo) == 0)
 			break ;
 		if (eating(philo) == 0)
@@ -164,12 +163,10 @@ int meals_manager(t_monitor *monitor, int *meals_done_flag, int i)
 	return (1);
 }
 
-int	trader(t_monitor *monitor)
+int	simu_start(t_monitor *monitor)
 {
 	create_mutex(monitor);
-	// printf("go creer thread\n");
 	create_thread(monitor);
-	// printf("go jointhread\n");
 	thread_join(monitor);
 	mutex_destroy(monitor);
 	return (1);
