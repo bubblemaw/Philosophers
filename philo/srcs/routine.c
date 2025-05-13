@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/12 19:52:05 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/13 14:18:12 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,12 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (philo->id % 2 == 0)
+		usleep(3000);
 	while (philo->monitor->dead != 1)
 	{
 		think(philo);
-		if (philo->id % 2 == 0)
-			usleep(7000);
+		usleep(2000);
 		if (taking_fork(philo) == 0)
 			break ;
 		if (eating(philo) == 0)
@@ -42,9 +43,14 @@ void	*routine_last(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
+	if (philo->id % 2 == 0)
+		usleep(3000);
 	while (philo->monitor->dead != 1)
 	{
 		think(philo);
+		usleep(2000);
+		if (philo->id % 2 == 0)
+			usleep(3000);
 		if (taking_fork_last_philo(philo) == 0)
 			break ;
 		if (eating(philo) == 0)
