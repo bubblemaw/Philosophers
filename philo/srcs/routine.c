@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/13 14:18:12 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/13 18:13:21 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,13 @@ void	*monitor_routine(void *arg)
 		i = 0;
 		while (i < monitor->philo_number)
 		{
+			pthread_mutex_lock(&monitor->dead_mutex);
 			if (check_dead(&monitor->philo[i]) == 0)
+			{
+				pthread_mutex_unlock(&monitor->dead_mutex);
 				return (NULL);
+			}
+			pthread_mutex_unlock(&monitor->dead_mutex);
 			if (monitor->meals_counter_flag == 1
 				&& meals_counter(monitor, &meals_done_flag, i) == 0)
 			{

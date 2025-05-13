@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:10:50 by maw               #+#    #+#             */
-/*   Updated: 2025/05/13 14:24:10 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/13 17:51:38 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,25 @@ int	eating(t_philo *philo)
 			return (0);
 		}
 	}
+	pthread_mutex_lock(philo->meal);
 	philo->eating = 0;
 	philo->meals_done++;
+	pthread_mutex_unlock(philo->meal);
 	unlock_fork(philo);
 	return (1);
 }
 
 int	check_dead(t_philo *philo)
 {
+	pthread_mutex_lock(philo->meal);
 	if (philo->eating == 0)
 	{
-		pthread_mutex_lock(philo->meal);
+		// pthread_mutex_lock(philo->meal);
 		if (get_time() - philo->last_meal
 			> philo->time_to_die
 			&& philo->eating == 0)
 		{
+			
 			philo->dead = 1;
 			philo->monitor->dead = 1;
 			if (philo->left_fork_mutex)
@@ -84,7 +88,8 @@ int	check_dead(t_philo *philo)
 				pthread_mutex_unlock(philo->right_fork_mutex);
 			return (0);
 		}
-		pthread_mutex_unlock(philo->meal);
+		// pthread_mutex_unlock(philo->meal);
 	}
+	pthread_mutex_unlock(philo->meal);
 	return (1);
 }
