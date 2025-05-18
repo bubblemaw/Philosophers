@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/13 18:13:21 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/16 17:52:02 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ void	*routine(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *)arg;
-	if (philo->id % 2 == 0)
-		usleep(3000);
+	// if (philo->id % 2 == 0)
+	// 	usleep(3000);
 	while (philo->monitor->dead != 1)
 	{
 		think(philo);
@@ -45,6 +45,7 @@ void	*routine_last(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		usleep(3000);
+	//philo->monitor->dead != 1
 	while (philo->monitor->dead != 1)
 	{
 		think(philo);

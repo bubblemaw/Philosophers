@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   action.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 17:10:50 by maw               #+#    #+#             */
-/*   Updated: 2025/05/13 17:51:38 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/16 17:27:43 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,22 +45,26 @@ int	eating(t_philo *philo)
 
 	printf("%ld %d is eating...\n",
 		(get_time() - philo->monitor->simu_start), philo->id);
-	philo->eating = 1;
 	start_time = get_time();
 	current_time = get_time();
 	pthread_mutex_lock(philo->meal);
+	philo->eating = 1;
 	philo->last_meal = get_time();
 	pthread_mutex_unlock(philo->meal);
 	while (philo->time_to_eat >= current_time - start_time)
 	{
 		usleep(500);
 		current_time = get_time();
+		pthread_mutex_lock(&philo->monitor->dead_mutex);
 		if (philo->monitor->dead == 1)
 		{
+			pthread_mutex_unlock(&philo->monitor->dead_mutex);
 			unlock_fork(philo);
 			return (0);
 		}
+		pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	}
+	pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	pthread_mutex_lock(philo->meal);
 	philo->eating = 0;
 	philo->meals_done++;
@@ -79,9 +83,11 @@ int	check_dead(t_philo *philo)
 			> philo->time_to_die
 			&& philo->eating == 0)
 		{
-			
 			philo->dead = 1;
+			// pthread_mutex_lock(&philo->monitor->dead_mutex);
 			philo->monitor->dead = 1;
+			printf("on est dans le lock\n");
+			// pthread_mutex_unlock(&philo->monitor->dead_mutex);
 			if (philo->left_fork_mutex)
 				pthread_mutex_unlock(philo->left_fork_mutex);
 			if (philo->right_fork_mutex)
