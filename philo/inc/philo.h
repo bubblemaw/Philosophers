@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/12 19:52:16 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/18 13:20:36 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_monitor
 	int				philo_number;
 	size_t			simu_start;
 	pthread_mutex_t	eating_mutex;
+	pthread_mutex_t	print_mutex;
 	int				meals_counter_flag;
 }	t_monitor;
 
