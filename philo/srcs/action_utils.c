@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 16:47:47 by masase            #+#    #+#             */
-/*   Updated: 2025/05/18 14:57:07 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/19 12:36:44 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,8 @@ int	taking_fork_last_philo(t_philo *philo)
 {
 	while (1)
 	{
-		pthread_mutex_lock(&philo->monitor->dead_mutex);
-		if (philo->monitor->dead == 1)
-		{
-			pthread_mutex_unlock(&philo->monitor->dead_mutex);
+		if (check_death_philo(philo) == 0)
 			break ;
-		}
-		pthread_mutex_unlock(&philo->monitor->dead_mutex);
 		if (philo->right_fork_mutex)
 		{
 			if (right_fork(philo) == 0)

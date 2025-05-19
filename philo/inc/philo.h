@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/18 13:20:36 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/19 12:11:23 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,7 @@ int		right_fork(t_philo *philo);
 int		check_dead(t_philo *philo);
 int		check_numerical_args(char **tab);
 int		create_monitor_thread(t_monitor *monitor, int i);
+int		check_death_philo(t_philo *philo);
+void	print_died(t_philo *philo);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/18 16:03:02 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/19 12:15:33 by masase           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,8 @@ void	*routine(void *arg)
 		usleep(3000);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->monitor->dead_mutex);
-		if (philo->monitor->dead == 1)
-		{
-			pthread_mutex_unlock(&philo->monitor->dead_mutex);
+		if (check_death_philo(philo) == 0)
 			break ;
-		}
-		else
-			pthread_mutex_unlock(&philo->monitor->dead_mutex);
 		think(philo);
 		usleep(2000);
 		if (taking_fork(philo) == 0)
@@ -40,12 +34,7 @@ void	*routine(void *arg)
 	}
 	pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	if (philo->dead == 1)
-	{
-		pthread_mutex_lock(&philo->monitor->print_mutex);
-		printf("%ld %d died\n",
-			(get_time() - philo->monitor->simu_start), philo->id);
-		pthread_mutex_unlock(&philo->monitor->print_mutex);
-	}
+		print_died(philo);
 	return (NULL);
 }
 
@@ -56,17 +45,10 @@ void	*routine_last(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		usleep(3000);
-	//philo->monitor->dead != 1
 	while (1)
 	{
-		pthread_mutex_lock(&philo->monitor->dead_mutex);
-		if (philo->monitor->dead == 1)
-		{
-			pthread_mutex_unlock(&philo->monitor->dead_mutex);
+		if (check_death_philo(philo) == 0)
 			break ;
-		}
-		else
-			pthread_mutex_unlock(&philo->monitor->dead_mutex);
 		think(philo);
 		usleep(2000);
 		if (taking_fork_last_philo(philo) == 0)
@@ -78,12 +60,7 @@ void	*routine_last(void *arg)
 	}
 	pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	if (philo->dead == 1)
-	{
-		pthread_mutex_lock(&philo->monitor->print_mutex);
-		printf("%ld %d died\n",
-			(get_time() - philo->monitor->simu_start), philo->id);
-		pthread_mutex_unlock(&philo->monitor->print_mutex);
-	}
+		print_died(philo);
 	return (NULL);
 }
 
@@ -103,10 +80,7 @@ void	*monitor_routine(void *arg)
 		while (i < monitor->philo_number)
 		{
 			if (check_dead(&monitor->philo[i]) == 0)
-			{
-				// pthread_mutex_unlock(&monitor->dead_mutex);
 				return (NULL);
-			}
 			if (monitor->meals_counter_flag == 1
 				&& meals_counter(monitor, &meals_done_flag, i) == 0)
 			{
@@ -132,5 +106,26 @@ int	meals_counter(t_monitor *monitor, int *meals_done_flag, int i)
 		*meals_done_flag = 0;
 	if (*meals_done_flag == 1 && i == num_philo - 1)
 		return (0);
+	return (1);
+}
+
+void	print_died(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->monitor->print_mutex);
+	printf("%ld %d died\n",
+		(get_time() - philo->monitor->simu_start), philo->id);
+	pthread_mutex_unlock(&philo->monitor->print_mutex);
+}
+
+int	check_death_philo(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->monitor->dead_mutex);
+	if (philo->monitor->dead == 1)
+	{
+		pthread_mutex_unlock(&philo->monitor->dead_mutex);
+		return (0);
+	}
+	else
+		pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	return (1);
 }
