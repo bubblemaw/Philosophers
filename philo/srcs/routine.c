@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:58:56 by masase            #+#    #+#             */
-/*   Updated: 2025/05/19 12:15:33 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/19 14:35:29 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	*routine(void *arg)
 		if (sleeping(philo) == 0)
 			break ;
 	}
-	pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	if (philo->dead == 1)
 		print_died(philo);
 	return (NULL);
@@ -58,7 +57,6 @@ void	*routine_last(void *arg)
 		if (sleeping(philo) == 0)
 			break ;
 	}
-	pthread_mutex_unlock(&philo->monitor->dead_mutex);
 	if (philo->dead == 1)
 		print_died(philo);
 	return (NULL);
@@ -107,14 +105,6 @@ int	meals_counter(t_monitor *monitor, int *meals_done_flag, int i)
 	if (*meals_done_flag == 1 && i == num_philo - 1)
 		return (0);
 	return (1);
-}
-
-void	print_died(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->monitor->print_mutex);
-	printf("%ld %d died\n",
-		(get_time() - philo->monitor->simu_start), philo->id);
-	pthread_mutex_unlock(&philo->monitor->print_mutex);
 }
 
 int	check_death_philo(t_philo *philo)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masase <masase@student.42.fr>              +#+  +:+       +#+        */
+/*   By: maw <maw@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 16:50:25 by maw               #+#    #+#             */
-/*   Updated: 2025/05/19 12:11:23 by masase           ###   ########.fr       */
+/*   Updated: 2025/05/19 14:24:43 by maw              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,16 @@ int		philo_init(t_monitor *monitor, char **tab, int argc);
 int		unlock_fork(t_philo *philo);
 int		taking_fork(t_philo *philo);
 int		taking_fork_last_philo(t_philo *philo);
-int		right_fork(t_philo *philo);
+int		right_fork_last(t_philo *philo);
+int		left_fork_last(t_philo *philo);
+void	print_fork(t_philo *philo);
 int		check_dead(t_philo *philo);
 int		check_numerical_args(char **tab);
 int		create_monitor_thread(t_monitor *monitor, int i);
 int		check_death_philo(t_philo *philo);
+int		check_death_philo_eating(t_philo *philo);
 void	print_died(t_philo *philo);
+void	activate_eating(t_philo *philo);
+void	desactivate_eating(t_philo *philo);
 
 #endif
